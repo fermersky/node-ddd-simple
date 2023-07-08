@@ -8,7 +8,7 @@
     "dev": "pnpm ts-node src/app.ts",
     "build": "tsc",
     "prod": "node dist/index.js",
-    "lint": "pnpm eslint ./src ."
+    "lint": "pnpm eslint ./src"
   },
   "keywords": [],
   "author": "",

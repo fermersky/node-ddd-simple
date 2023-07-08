@@ -1,7 +1,8 @@
 import { injectable } from "tsyringe";
 import { PoolClient } from "pg";
 import { Driver } from "@domain/driver";
-import { IDriverRepository } from "./interface";
+import { IDriverRepository } from "../interface";
+import { IDriverQueryResult } from "./driver.repository.types";
 
 @injectable()
 export class DriverRepository implements IDriverRepository {
@@ -12,11 +13,13 @@ export class DriverRepository implements IDriverRepository {
   }
 
   async getDrivers(): Promise<Driver[]> {
-    const result = await this.client.query("select * from drivers limit 3");
+    const result = await this.client.query<IDriverQueryResult>(
+      "select * from drivers limit 3"
+    );
     return this.mapToDomain(result.rows);
   }
 
-  private mapToDomain(rows: any[]): Driver[] {
+  private mapToDomain(rows: IDriverQueryResult[]): Driver[] {
     return rows.map((row) => ({
       id: row.id,
       password: row.password,
