@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { injectable } from "tsyringe";
 import { PoolClient } from "pg";
 import { Driver } from "@domain/driver";

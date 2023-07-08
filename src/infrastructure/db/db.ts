@@ -4,14 +4,13 @@ import { DriverRepository } from "./repositories";
 
 @singleton()
 export class DB {
-  private client?: PoolClient;
+  private client: PoolClient | null;
   private dbRepos: any[] = [];
   private pool: Pool;
 
   constructor(
     @inject(DriverRepository) public driverRepository: DriverRepository
   ) {
-    // this.dbRepos = [this.addressRepository, this.driverRepository];
     this.dbRepos = [this.driverRepository];
 
     this.pool = new Pool({
@@ -36,12 +35,12 @@ export class DB {
   async commit() {
     await this.client?.query("COMMIT;");
 
-    this.setClient(undefined);
+    this.setClient(null);
 
     this.client?.release();
   }
 
-  private setClient(client?: PoolClient) {
+  private setClient(client: PoolClient | null) {
     this.client = client;
     this.dbRepos.map((repo) => repo.setClient(this.client));
   }
