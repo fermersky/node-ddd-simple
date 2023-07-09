@@ -12,11 +12,24 @@ export class DriverRepository implements IDriverRepository {
     this.client = client;
   }
 
-  async getDrivers(): Promise<Driver[]> {
+  async getAll(): Promise<Driver[]> {
     const result = await this.client.query<IDriverQueryResult>(
-      "select * from drivers limit 3"
+      "SELECT * FROM DRIVERS"
     );
     return this.mapToDomain(result.rows);
+  }
+
+  async findDriverByEmail(email: string): Promise<Driver | null> {
+    const result = await this.client.query<IDriverQueryResult>(
+      "SELECT * FROM DRIVERS WHERE email = $1",
+      [email]
+    );
+
+    if (result.rowCount === 0) {
+      return null;
+    }
+
+    return this.mapToDomain(result.rows)[0];
   }
 
   private mapToDomain(rows: IDriverQueryResult[]): Driver[] {

@@ -6,6 +6,6 @@ export class DriverController {
   constructor(@inject(DriverService) private driverService: DriverService) {}
 
   async getDrivers() {
-    return this.driverService.getDrivers();
+    return this.driverService.getAll();
   }
 }

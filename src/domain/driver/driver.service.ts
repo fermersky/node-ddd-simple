@@ -1,19 +1,26 @@
 import { injectable, inject } from "tsyringe";
-import { DB } from "@infrastructure/db";
+import { PGContext } from "@infrastructure/db";
 import { Driver } from "./index";
 import { JWTService } from "@infrastructure/crypto";
 
 @injectable()
 export class DriverService {
   constructor(
-    @inject(DB) private db: DB,
+    @inject(PGContext) private pg: PGContext,
     @inject(JWTService) private jwt: JWTService
   ) {}
 
-  async getDrivers(): Promise<Driver[]> {
-    await this.db.begin();
-    const drivers = await this.db.driverRepository.getDrivers();
-    await this.db.commit();
+  async getAll(): Promise<Driver[]> {
+    // await this.pg.begin();
+
+    const drivers = await this.pg.driverRepository.getAll();
+    const driver = await this.pg.driverRepository.findDriverByEmail(
+      "andrew@mail.com"
+    );
+
+    console.log({ driver });
+
+    await this.pg.commit();
 
     // just for fun
     const token = await this.jwt.sign({ test: "test" }, "secret", {

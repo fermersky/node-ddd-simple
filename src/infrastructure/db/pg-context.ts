@@ -1,11 +1,12 @@
 import { inject, singleton } from "tsyringe";
 import { PoolClient, Pool } from "pg";
 import { DriverRepository } from "./repositories";
+import { IRepository } from "./repositories/interface";
 
 @singleton()
-export class DB {
+export class PGContext {
   private client: PoolClient | null;
-  private dbRepos: any[] = [];
+  private dbRepos: IRepository<any>[] = [];
   private pool: Pool;
 
   constructor(
@@ -33,7 +34,12 @@ export class DB {
   }
 
   async commit() {
-    await this.client?.query("COMMIT;");
+    if (this.client == null) {
+      throw new Error(
+        "You are attempting to commit without starting a transaction! Consider calling `.begin()` firstly."
+      );
+    }
+    await this.client.query("COMMIT;");
 
     this.setClient(null);
 
