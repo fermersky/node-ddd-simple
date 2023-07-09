@@ -2,11 +2,12 @@ import { inject, singleton } from "tsyringe";
 import { PoolClient, Pool } from "pg";
 import { DriverRepository } from "./repositories";
 import { IRepository } from "./repositories/interface";
+import { Entity } from "@domain/entity";
 
 @singleton()
 export class PGContext {
   private client: PoolClient | null;
-  private dbRepos: IRepository<any>[] = [];
+  private dbRepos: IRepository<Entity>[] = [];
   private pool: Pool;
 
   constructor(

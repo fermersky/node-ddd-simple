@@ -1,7 +1,7 @@
 import { injectable, inject } from "tsyringe";
 import { PGContext } from "@infrastructure/db";
-import { Driver } from "./index";
 import { JWTService } from "@infrastructure/crypto";
+import { Driver } from "@domain/driver";
 
 @injectable()
 export class DriverService {
@@ -11,7 +11,7 @@ export class DriverService {
   ) {}
 
   async getAll(): Promise<Driver[]> {
-    // await this.pg.begin();
+    await this.pg.begin();
 
     const drivers = await this.pg.driverRepository.getAll();
     const driver = await this.pg.driverRepository.findDriverByEmail(

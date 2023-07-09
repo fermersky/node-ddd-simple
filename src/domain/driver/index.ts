@@ -1,7 +1,7 @@
 import { z } from "zod";
+import { EntitySchema } from "../entity";
 
-export const DriverSchema = z.object({
-  id: z.string(),
+export const DriverSchema = EntitySchema.extend({
   password: z.string(),
   email: z.string().email(),
   phone: z.string().optional(),
