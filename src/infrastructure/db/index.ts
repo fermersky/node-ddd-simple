@@ -1,2 +1,2 @@
 export * from "./repositories";
-export * from "./pg-context";
+export * from "./db.context";

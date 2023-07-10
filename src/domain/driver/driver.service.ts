@@ -29,7 +29,7 @@ export class DriverService {
       return null;
     }
 
-    const same = await this.bcrypt.compare(password, driver!.password);
+    const same = await this.bcrypt.compare(password, driver.password);
 
     if (same) {
       const token = await this.jwt.sign({}, "secret", {
