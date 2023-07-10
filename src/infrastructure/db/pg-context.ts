@@ -23,7 +23,7 @@ export class PGContext {
       password: "123",
     });
 
-    console.log("created PG pool");
+    console.log('connected to the postgres database "best_driver_db" 📚');
   }
 
   async begin() {
@@ -42,9 +42,9 @@ export class PGContext {
     }
     await this.client.query("COMMIT;");
 
-    this.setClient(null);
+    this.client.release();
 
-    this.client?.release();
+    this.setClient(null);
   }
 
   private setClient(client: PoolClient | null) {
