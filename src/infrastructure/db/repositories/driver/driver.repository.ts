@@ -1,11 +1,11 @@
 import { injectable } from "tsyringe";
 import { PoolClient } from "pg";
-import { Driver } from "@domain/driver";
-import { IDriverRepository } from "../interface";
+import { Driver, IDriverRepository } from "@domain/driver";
 import { IDriverQueryResult } from "./driver.repository.types";
+import { IPGRepository } from "../interfaces";
 
 @injectable()
-export class DriverRepository implements IDriverRepository {
+export class DriverRepository implements IDriverRepository, IPGRepository {
   private client: PoolClient;
 
   async setClient(client: PoolClient) {
