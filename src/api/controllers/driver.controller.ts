@@ -6,11 +6,15 @@ import {
 } from "@api/dto/driver.dto";
 import { DriverService } from "@domain/driver";
 import { inject, injectable } from "tsyringe";
-import { BadRequest } from "@api/http/exceptions";
+import { BadRequest } from "@api/http/errors";
+import { JWTService } from "@infrastructure/crypto";
 
 @injectable()
 export class DriverController {
-  constructor(@inject(DriverService) private driverService: DriverService) {}
+  constructor(
+    @inject(DriverService) private driverService: DriverService,
+    @inject(JWTService) private jwt: JWTService
+  ) {}
 
   async getDrivers(): Promise<GetDriversResponseBody> {
     const drivers = await this.driverService.getAll();
@@ -22,12 +26,19 @@ export class DriverController {
     const email = req.body.email;
     const password = req.body.password;
 
-    const token = await this.driverService.authenticate(email, password);
+    const authenticated = await this.driverService.authenticate(
+      email,
+      password
+    );
 
-    if (token == null) {
-      throw new BadRequest("Failed authentication for a driver");
+    if (authenticated) {
+      const token = await this.jwt.sign({}, "secret", {
+        expiresIn: Date.now() + 15 * 60 * 1000,
+      });
+
+      return { token: token as string };
     }
 
-    return { token };
+    throw new BadRequest("Could not authenticate the driver");
   }
 }

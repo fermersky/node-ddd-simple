@@ -1,5 +1,6 @@
 import { singleton } from "tsyringe";
 import { z } from "zod";
+import "dotenv/config";
 
 const EnvSchema = z.object({
   HTTP_LOGGING: z.boolean().default(false),
@@ -11,7 +12,7 @@ export class AppConfig {
 
   constructor() {
     const envs = EnvSchema.parse({
-      HTTP_LOGGING: Boolean(process.env["HTTP_LOGGING"]),
+      HTTP_LOGGING: process.env["HTTP_LOGGING"] === "true" ? true : false,
     });
 
     Object.entries(envs).map(([key, value]) => {

@@ -1,5 +1,5 @@
 import express from "express";
-import { DriverController } from "../controllers/driver";
+import { DriverController } from "../controllers/driver.controller";
 import { container } from "tsyringe";
 import { ApiHandler } from "./handlers";
 import { AppConfig } from "@infrastructure/app.config";
@@ -7,8 +7,6 @@ import { ConsoleLogger } from "@infrastructure/logger";
 
 const driverController = container.resolve(DriverController);
 const appConfig = container.resolve(AppConfig);
-
-container.register("Logger", { useClass: ConsoleLogger });
 
 const logger = new ConsoleLogger();
 const logging = appConfig.HTTP_LOGGING;

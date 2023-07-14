@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AppError } from "./exceptions";
+import { AppError } from "./errors";
 import { z } from "zod";
 
 const ApiHandlerOptionsSchema = z.object({
@@ -16,22 +16,19 @@ export const ApiHandler =
     options: ApiHandlerOptions = { logging: false, logger: console }
   ) =>
   async (handler: (req: Request, res: Response) => Promise<any>) => {
-    try {
-      const { logging, logger } = await ApiHandlerOptionsSchema.parseAsync(
-        options
-      );
+    const { logging, logger } = await ApiHandlerOptionsSchema.parseAsync(
+      options
+    );
 
-      if (logging) {
+    try {
+      logging &&
         logger.log(
           `HTTP => ${new Date().toTimeString()} ${req.method} ${req.path}`
         );
-      }
 
       const result = await handler(req, res);
 
-      if (logging) {
-        logger.log(`HTTP <= ${new Date().toTimeString()} took 5 sec`);
-      }
+      logging && logger.log(`HTTP <= ${new Date().toTimeString()} took 5 sec`);
 
       res.json(result);
     } catch (error) {
@@ -47,7 +44,7 @@ export const ApiHandler =
         });
       }
 
-      console.log(error);
+      logger.log(error);
 
       return res.status(500).json({
         statusCode: 500,
