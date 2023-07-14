@@ -24,4 +24,24 @@ export class JWTService {
       });
     });
   }
+  /**
+   * Asynchronously verify given token using a secret or a public key to get a decoded token
+   * @param token - JWT string to verify
+   * @param secretOrPublicKey - A string or buffer containing either the secret for HMAC algorithms,
+   * or the PEM encoded public key for RSA and ECDSA. If jwt.verify is called asynchronous,
+   */
+  public async verify(
+    token: string,
+    secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret
+  ): Promise<string | jwt.JwtPayload | undefined> {
+    return new Promise((resolve, reject) => {
+      jwt.verify(token, secretOrPublicKey, (error, encoded) => {
+        if (error) {
+          reject(error);
+        }
+
+        resolve(encoded);
+      });
+    });
+  }
 }
