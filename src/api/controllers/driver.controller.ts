@@ -8,6 +8,7 @@ import { DriverService } from "@domain/driver";
 import { inject, injectable } from "tsyringe";
 import { BadRequest } from "@api/http/errors";
 import { JWTService } from "@infrastructure/crypto";
+import { Authorize } from "@api/http/decorators";
 
 @injectable()
 export class DriverController {
@@ -16,6 +17,7 @@ export class DriverController {
     @inject(JWTService) private jwt: JWTService
   ) {}
 
+  // @Authorize
   async getDrivers(): Promise<GetDriversResponseBody> {
     const drivers = await this.driverService.getAll();
 
