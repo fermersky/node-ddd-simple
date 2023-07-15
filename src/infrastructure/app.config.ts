@@ -1,6 +1,8 @@
 import { singleton } from "tsyringe";
 import { z } from "zod";
+
 import "dotenv/config";
+import "./di";
 
 const EnvSchema = z.object({
   HTTP_LOGGING: z.boolean().default(false),

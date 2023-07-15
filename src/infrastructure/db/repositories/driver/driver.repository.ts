@@ -19,7 +19,7 @@ export class DriverRepository implements IDriverRepository, IPGRepository {
     return this.mapToDomain(result.rows);
   }
 
-  async findDriverByEmail(email: string): Promise<Driver | null> {
+  async findByEmail(email: string): Promise<Driver | null> {
     const result = await this.client.query<IDriverQueryResult>(
       "SELECT * FROM DRIVERS WHERE email = $1",
       [email]

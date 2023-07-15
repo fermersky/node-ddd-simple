@@ -10,7 +10,7 @@ export class PGContext {
   private pool: Pool;
 
   constructor(
-    @inject(DriverRepository) public driverRepository: DriverRepository
+    @inject("IDriverRepository") public driverRepository: DriverRepository
   ) {
     this.dbRepos = [this.driverRepository];
 
