@@ -1,14 +1,15 @@
-import "reflect-metadata";
-import { container } from "tsyringe";
+import 'reflect-metadata';
+import { container } from 'tsyringe';
 
-import { app } from "@api/http/routes";
-import { AppConfig } from "@infrastructure/app.config";
+import { AppConfig } from '@infrastructure/app.config';
+
+import { app } from '@api/http/routes';
 
 const appConfig = container.resolve(AppConfig);
 
 app.listen({ port: appConfig.HTTP_PORT });
 
-app.addHook("onReady", () => {
+app.addHook('onReady', () => {
   console.log(`server is running on port ${appConfig.HTTP_PORT} 🚀`);
 
   console.log(appConfig);

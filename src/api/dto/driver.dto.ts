@@ -1,5 +1,6 @@
-import { Driver } from "@domain/driver";
-import { z } from "zod";
+import { z } from 'zod';
+
+import { Driver } from '@domain/driver';
 
 const GetDriverSchema = z.object({
   id: z.string(),

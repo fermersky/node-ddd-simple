@@ -1,7 +1,9 @@
-import { IDriverRepository } from "@domain/driver";
-import { container } from "tsyringe";
-import { DriverRepository } from "./db/repositories";
+import { container } from 'tsyringe';
 
-container.register<IDriverRepository>("IDriverRepository", {
+import { IDriverRepository } from '@domain/driver';
+
+import { DriverRepository } from './db/repositories';
+
+container.register<IDriverRepository>('IDriverRepository', {
   useClass: DriverRepository,
 });

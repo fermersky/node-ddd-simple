@@ -1,5 +1,6 @@
-import { z } from "zod";
-import { EntitySchema } from "../entity";
+import { z } from 'zod';
+
+import { EntitySchema } from '../entity';
 
 export const DriverSchema = EntitySchema.extend({
   password: z.string(),
@@ -11,5 +12,5 @@ export const DriverSchema = EntitySchema.extend({
 
 export type Driver = z.infer<typeof DriverSchema>;
 
-export * from "./driver.service";
-export * from "./driver.interface";
+export * from './driver.service';
+export * from './driver.interface';

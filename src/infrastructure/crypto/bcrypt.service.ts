@@ -1,5 +1,5 @@
-import { injectable } from "tsyringe";
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
+import { injectable } from 'tsyringe';
 
 @injectable()
 export class BcryptService {

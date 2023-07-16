@@ -1,17 +1,11 @@
-import { FastifyRequest, FastifyReply } from "fastify";
-import { AppError } from "./errors";
-import { ZodError, z } from "zod";
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { ZodError, z } from 'zod';
 
-type FastifyHTTPHandler = (
-  req: FastifyRequest,
-  res: FastifyReply
-) => Promise<any>;
+import { AppError } from './errors';
 
-const TryCatchErrors = async (
-  req: FastifyRequest,
-  res: FastifyReply,
-  cb: () => Promise<void>
-) => {
+type FastifyHTTPHandler = (req: FastifyRequest, res: FastifyReply) => Promise<any>;
+
+const TryCatchErrors = async (req: FastifyRequest, res: FastifyReply, cb: () => Promise<void>) => {
   try {
     await cb();
   } catch (error) {
@@ -33,7 +27,7 @@ const TryCatchErrors = async (
       return res.status(400).send({
         statusCode: 400,
         body: {
-          error: "Validation error",
+          error: 'Validation error',
           message: error,
         },
       });
@@ -42,7 +36,7 @@ const TryCatchErrors = async (
     return res.status(500).send({
       statusCode: 500,
       body: {
-        error: "Internal Server Error",
+        error: 'Internal Server Error',
       },
     });
   }
@@ -59,18 +53,13 @@ export const ApiHandler =
   (
     req: FastifyRequest,
     res: FastifyReply,
-    options: ApiHandlerOptions = { logging: false, logger: console }
+    options: ApiHandlerOptions = { logging: false, logger: console },
   ) =>
   async (handler: FastifyHTTPHandler) => {
     await TryCatchErrors(req, res, async () => {
-      const { logging, logger } = await ApiHandlerOptionsSchema.parseAsync(
-        options
-      );
+      const { logging, logger } = await ApiHandlerOptionsSchema.parseAsync(options);
 
-      logging &&
-        logger.log(
-          `HTTP => ${new Date().toTimeString()} ${req.method} ${req.url}`
-        );
+      logging && logger.log(`HTTP => ${new Date().toTimeString()} ${req.method} ${req.url}`);
 
       const result = await handler(req, res);
 

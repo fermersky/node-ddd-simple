@@ -1,23 +1,26 @@
+import { FastifyRequest } from 'fastify';
+import { inject, injectable } from 'tsyringe';
+
+import { DriverService } from '@domain/driver';
+
+import { AppConfig } from '@infrastructure/app.config';
+import { JWTService } from '@infrastructure/crypto';
+
 import {
   DriverLoginResponseBody,
   DriverSignInSchema,
   GetDriversResponseBody,
   fromDomain,
-} from "@api/dto/driver.dto";
-import { DriverService } from "@domain/driver";
-import { inject, injectable } from "tsyringe";
-import { BadRequest } from "@api/http/errors";
-import { JWTService } from "@infrastructure/crypto";
-import { FastifyRequest } from "fastify";
-import { Authorize } from "@api/http/decorators";
-import { AppConfig } from "@infrastructure/app.config";
+} from '@api/dto/driver.dto';
+import { Authorize } from '@api/http/decorators';
+import { BadRequest } from '@api/http/errors';
 
 @injectable()
 export class DriverController {
   constructor(
     @inject(DriverService) private driverService: DriverService,
     @inject(JWTService) private jwt: JWTService,
-    @inject(AppConfig) private config: AppConfig
+    @inject(AppConfig) private config: AppConfig,
   ) {}
 
   @Authorize
@@ -30,10 +33,7 @@ export class DriverController {
   async login(req: FastifyRequest): Promise<DriverLoginResponseBody> {
     const { email, password } = await DriverSignInSchema.parseAsync(req.body);
 
-    const authenticated = await this.driverService.authenticate(
-      email,
-      password
-    );
+    const authenticated = await this.driverService.authenticate(email, password);
 
     if (authenticated) {
       const token = await this.jwt.sign({}, this.config.JWT_SECRET, {
@@ -43,6 +43,6 @@ export class DriverController {
       return { token: token as string };
     }
 
-    throw new BadRequest("Could not authenticate the driver");
+    throw new BadRequest('Could not authenticate the driver');
   }
 }

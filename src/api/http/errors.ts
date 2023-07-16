@@ -15,19 +15,19 @@ export class AppError implements Error {
 }
 
 export class NotAuthorized extends AppError {
-  constructor(message = "NotAuthorized") {
-    super("NotAuthorized", message, 401);
+  constructor(message = 'NotAuthorized') {
+    super('NotAuthorized', message, 401);
   }
 }
 
 export class NotFound extends AppError {
-  constructor(message = "NotFound") {
-    super("NotFound", message, 404);
+  constructor(message = 'NotFound') {
+    super('NotFound', message, 404);
   }
 }
 
 export class BadRequest extends AppError {
-  constructor(message = "Bad Request") {
-    super("BadRequest", message, 400);
+  constructor(message = 'Bad Request') {
+    super('BadRequest', message, 400);
   }
 }

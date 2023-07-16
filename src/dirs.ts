@@ -1,8 +1,8 @@
-import fs from "node:fs";
+import fs from 'node:fs';
 
-const BASE_PATH = "./";
+const BASE_PATH = './';
 
-const ignore = ["node_modules", "dist", ".git"];
+const ignore = ['node_modules', 'dist', '.git'];
 
 function printDirs(path: string, depth = 0) {
   const dirs = fs.readdirSync(path, { withFileTypes: true });
@@ -10,7 +10,7 @@ function printDirs(path: string, depth = 0) {
   dirs.forEach((dir) => {
     if (dir.isDirectory() && !ignore.includes(dir.name)) {
       log(dir.name, depth + 1);
-      return printDirs(path + "/" + dir.name, depth + 1);
+      return printDirs(path + '/' + dir.name, depth + 1);
     }
 
     log(dir.name, depth + 1);
@@ -18,7 +18,7 @@ function printDirs(path: string, depth = 0) {
 }
 
 function log(str: string, depth: number) {
-  console.log(`${" ".repeat(depth * 2)}${str}`);
+  console.log(`${' '.repeat(depth * 2)}${str}`);
 }
 
 printDirs(BASE_PATH, 0);

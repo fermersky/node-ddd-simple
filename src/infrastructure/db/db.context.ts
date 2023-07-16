@@ -1,7 +1,8 @@
-import { inject, singleton } from "tsyringe";
-import { PoolClient, Pool } from "pg";
-import { DriverRepository } from "./repositories";
-import { IPGRepository } from "./repositories/interfaces";
+import { Pool, PoolClient } from 'pg';
+import { inject, singleton } from 'tsyringe';
+
+import { DriverRepository } from './repositories';
+import { IPGRepository } from './repositories/interfaces';
 
 @singleton()
 export class PGContext {
@@ -9,17 +10,15 @@ export class PGContext {
   private dbRepos: IPGRepository[] = [];
   private pool: Pool;
 
-  constructor(
-    @inject("IDriverRepository") public driverRepository: DriverRepository
-  ) {
+  constructor(@inject('IDriverRepository') public driverRepository: DriverRepository) {
     this.dbRepos = [this.driverRepository];
 
     this.pool = new Pool({
-      host: "localhost",
+      host: 'localhost',
       port: 5432,
-      database: "best_driver_db",
-      user: "postgres",
-      password: "123",
+      database: 'best_driver_db',
+      user: 'postgres',
+      password: '123',
     });
 
     console.log('connected to the postgres database "best_driver_db" 📚');
@@ -30,16 +29,16 @@ export class PGContext {
 
     this.setClient(client);
 
-    await client.query("BEGIN;");
+    await client.query('BEGIN;');
   }
 
   async commit() {
     if (this.client == null) {
       throw new Error(
-        "You are attempting to commit without starting a transaction! Consider calling `.begin()` firstly."
+        'You are attempting to commit without starting a transaction! Consider calling `.begin()` firstly.',
       );
     }
-    await this.client.query("COMMIT;");
+    await this.client.query('COMMIT;');
 
     this.client.release();
 

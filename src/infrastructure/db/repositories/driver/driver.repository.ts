@@ -1,8 +1,10 @@
-import { injectable } from "tsyringe";
-import { PoolClient } from "pg";
-import { Driver, IDriverRepository } from "@domain/driver";
-import { IDriverQueryResult } from "./driver.repository.types";
-import { IPGRepository } from "../interfaces";
+import { PoolClient } from 'pg';
+import { injectable } from 'tsyringe';
+
+import { Driver, IDriverRepository } from '@domain/driver';
+
+import { IPGRepository } from '../interfaces';
+import { IDriverQueryResult } from './driver.repository.types';
 
 @injectable()
 export class DriverRepository implements IDriverRepository, IPGRepository {
@@ -13,17 +15,14 @@ export class DriverRepository implements IDriverRepository, IPGRepository {
   }
 
   async getAll(): Promise<Driver[]> {
-    const result = await this.client.query<IDriverQueryResult>(
-      "SELECT * FROM DRIVERS"
-    );
+    const result = await this.client.query<IDriverQueryResult>('SELECT * FROM DRIVERS');
     return this.mapToDomain(result.rows);
   }
 
   async findByEmail(email: string): Promise<Driver | null> {
-    const result = await this.client.query<IDriverQueryResult>(
-      "SELECT * FROM DRIVERS WHERE email = $1",
-      [email]
-    );
+    const result = await this.client.query<IDriverQueryResult>('SELECT * FROM DRIVERS WHERE email = $1', [
+      email,
+    ]);
 
     if (result.rowCount === 0) {
       return null;

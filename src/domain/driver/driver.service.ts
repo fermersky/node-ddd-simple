@@ -1,13 +1,15 @@
-import { injectable, inject } from "tsyringe";
-import { PGContext } from "@infrastructure/db";
-import { BcryptService } from "@infrastructure/crypto";
-import { Driver } from "@domain/driver";
+import { inject, injectable } from 'tsyringe';
+
+import { Driver } from '@domain/driver';
+
+import { BcryptService } from '@infrastructure/crypto';
+import { PGContext } from '@infrastructure/db';
 
 @injectable()
 export class DriverService {
   constructor(
     @inject(PGContext) private pg: PGContext,
-    @inject(BcryptService) private bcrypt: BcryptService
+    @inject(BcryptService) private bcrypt: BcryptService,
   ) {}
 
   async getAll(): Promise<Driver[]> {

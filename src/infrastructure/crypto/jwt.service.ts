@@ -1,5 +1,5 @@
-import * as jwt from "jsonwebtoken";
-import { injectable } from "tsyringe";
+import * as jwt from 'jsonwebtoken';
+import { injectable } from 'tsyringe';
 
 @injectable()
 export class JWTService {
@@ -12,7 +12,7 @@ export class JWTService {
   public async sign(
     payload: string | Buffer | object,
     secretOrPrivateKey: jwt.Secret,
-    options: jwt.SignOptions
+    options: jwt.SignOptions,
   ): Promise<string | undefined> {
     return new Promise((resolve, reject) => {
       jwt.sign(payload, secretOrPrivateKey, options, (error, encoded) => {
@@ -32,7 +32,7 @@ export class JWTService {
    */
   public async verify(
     token: string,
-    secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret
+    secretOrPublicKey: jwt.Secret | jwt.GetPublicKeyOrSecret,
   ): Promise<string | jwt.JwtPayload | undefined> {
     return new Promise((resolve, reject) => {
       jwt.verify(token, secretOrPublicKey, (error, encoded) => {
