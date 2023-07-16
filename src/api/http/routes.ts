@@ -1,6 +1,7 @@
-import express from "express";
-import { DriverController } from "../controllers/driver.controller";
+import fastify from "fastify";
 import { container } from "tsyringe";
+
+import { DriverController } from "../controllers/driver.controller";
 import { ApiHandler } from "./handlers";
 import { AppConfig } from "@infrastructure/app.config";
 import { ConsoleLogger } from "@infrastructure/logger";
@@ -11,9 +12,7 @@ const appConfig = container.resolve(AppConfig);
 const logger = new ConsoleLogger();
 const logging = appConfig.HTTP_LOGGING;
 
-export const app = express();
-
-app.use(express.json());
+export const app = fastify();
 
 app.get("/drivers", async (req, res) => {
   const handler = driverController.getDrivers.bind(driverController);
@@ -24,5 +23,8 @@ app.get("/drivers", async (req, res) => {
 app.post("/driver/login", async (req, res) => {
   const handler = driverController.login.bind(driverController);
 
-  await ApiHandler(req, res, { logging, logger })(handler);
+  await ApiHandler(req, res, {
+    logging,
+    logger,
+  })(handler);
 });

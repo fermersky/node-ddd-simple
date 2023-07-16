@@ -28,3 +28,10 @@ const DriverLoginResponseSchema = z.object({
 });
 
 export type DriverLoginResponseBody = z.infer<typeof DriverLoginResponseSchema>;
+
+export const DriverSignInSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+
+export type DriverSignInRequestBody = z.infer<typeof DriverSignInSchema>;
