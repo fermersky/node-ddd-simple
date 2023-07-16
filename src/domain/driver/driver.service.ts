@@ -20,6 +20,14 @@ export class DriverService {
     return drivers;
   }
 
+  async findByEmail(email: string): Promise<Driver | null> {
+    await this.pg.begin();
+    const driver = await this.pg.driverRepository.findByEmail(email);
+    await this.pg.commit();
+
+    return driver;
+  }
+
   async authenticate(email: string, password: string): Promise<boolean> {
     await this.pg.begin();
     const driver = await this.pg.driverRepository.findByEmail(email);

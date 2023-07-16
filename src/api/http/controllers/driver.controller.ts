@@ -1,33 +1,43 @@
 import { FastifyRequest } from 'fastify';
 import { inject, injectable } from 'tsyringe';
 
-import { DriverService } from '@domain/driver';
+import { Driver, DriverService } from '@domain/driver';
 
-import { AppConfig } from '@infrastructure/app.config';
-import { JWTService } from '@infrastructure/crypto';
-
-import { Authorize } from '@api/http/core/decorators';
-import { BadRequest } from '@api/http/core/errors';
+import { BadRequest, NotFound } from '../core/errors';
+import { IDriverJwtPayload, JwtHttpService } from '../core/services/jwt-http.service';
 import {
   DriverLoginResponseBody,
   DriverSignInSchema,
+  GetDriverResponseBody,
   GetDriversResponseBody,
   fromDomain,
-} from '@api/http/dto/driver.dto';
+} from '../dto/driver.dto';
 
 @injectable()
 export class DriverController {
   constructor(
     @inject(DriverService) private driverService: DriverService,
-    @inject(JWTService) private jwt: JWTService,
-    @inject(AppConfig) private config: AppConfig,
+    @inject(JwtHttpService) private jwt: JwtHttpService,
   ) {}
 
-  @Authorize
-  async getDrivers(): Promise<GetDriversResponseBody> {
+  async getAll(req: FastifyRequest): Promise<GetDriversResponseBody> {
+    await this.jwt.validateRequest<IDriverJwtPayload>(req);
+
     const drivers = await this.driverService.getAll();
 
     return drivers.map(fromDomain);
+  }
+
+  async me(req: FastifyRequest): Promise<GetDriverResponseBody> {
+    const { email } = await this.jwt.validateRequest(req);
+
+    const driver = await this.driverService.findByEmail(email);
+
+    if (driver) {
+      return fromDomain(driver);
+    }
+
+    throw new NotFound('Driver not found!');
   }
 
   async login(req: FastifyRequest): Promise<DriverLoginResponseBody> {
@@ -36,11 +46,14 @@ export class DriverController {
     const authenticated = await this.driverService.authenticate(email, password);
 
     if (authenticated) {
-      const token = await this.jwt.sign({}, this.config.JWT_SECRET, {
-        expiresIn: Date.now() + 15 * 60 * 1000,
+      const driver = (await this.driverService.findByEmail(email)) as Driver;
+
+      const token = await this.jwt.createToken({
+        id: driver.id,
+        email: driver.email,
       });
 
-      return { token: token as string };
+      return { token };
     }
 
     throw new BadRequest('Could not authenticate the driver');

@@ -2,7 +2,7 @@ import * as jwt from 'jsonwebtoken';
 import { injectable } from 'tsyringe';
 
 @injectable()
-export class JWTService {
+export class JwtService {
   /**
    * **Asynchronously** sign the given payload into a JSON Web Token string
    * @param payload - Payload to sign, could be an literal, buffer or string
@@ -37,7 +37,7 @@ export class JWTService {
     return new Promise((resolve, reject) => {
       jwt.verify(token, secretOrPublicKey, (error, encoded) => {
         if (error) {
-          reject(error);
+          resolve(undefined);
         }
 
         resolve(encoded);

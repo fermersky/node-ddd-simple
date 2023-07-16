@@ -10,11 +10,11 @@ const GetDriverSchema = z.object({
   last_name: z.string(),
 });
 
-type GetDriverResponse = z.infer<typeof GetDriverSchema>;
+export type GetDriverResponseBody = z.infer<typeof GetDriverSchema>;
 
-export type GetDriversResponseBody = GetDriverResponse[];
+export type GetDriversResponseBody = GetDriverResponseBody[];
 
-export function fromDomain(driver: Driver): GetDriverResponse {
+export function fromDomain(driver: Driver): GetDriverResponseBody {
   return {
     id: driver.id,
     first_name: driver.first_name,
