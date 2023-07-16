@@ -6,14 +6,14 @@ import { DriverService } from '@domain/driver';
 import { AppConfig } from '@infrastructure/app.config';
 import { JWTService } from '@infrastructure/crypto';
 
+import { Authorize } from '@api/http/defs/decorators';
+import { BadRequest } from '@api/http/defs/errors';
 import {
   DriverLoginResponseBody,
   DriverSignInSchema,
   GetDriversResponseBody,
   fromDomain,
-} from '@api/dto/driver.dto';
-import { Authorize } from '@api/http/decorators';
-import { BadRequest } from '@api/http/errors';
+} from '@api/http/dto/driver.dto';
 
 @injectable()
 export class DriverController {

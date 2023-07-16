@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 
 import { AppConfig } from '@infrastructure/app.config';
 
-import { app } from '@api/http/routes';
+import { app } from '@api/http/defs/routes';
 
 const appConfig = container.resolve(AppConfig);
 
