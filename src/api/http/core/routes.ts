@@ -1,4 +1,4 @@
-import fastify from 'fastify';
+import { FastifyInstance } from 'fastify';
 import { container } from 'tsyringe';
 
 import { AppConfig } from '@infrastructure/app.config';
@@ -13,19 +13,19 @@ const appConfig = container.resolve(AppConfig);
 const logger = new ConsoleLogger();
 const logging = appConfig.HTTP_LOGGING;
 
-export const app = fastify();
+export default async function routes(app: FastifyInstance) {
+  app.get('/drivers', async (req, res) => {
+    const handler = driverController.getDrivers.bind(driverController);
 
-app.get('/drivers', async (req, res) => {
-  const handler = driverController.getDrivers.bind(driverController);
+    await ApiHandler(req, res, { logging, logger })(handler);
+  });
 
-  await ApiHandler(req, res, { logging, logger })(handler);
-});
+  app.post('/driver/login', async (req, res) => {
+    const handler = driverController.login.bind(driverController);
 
-app.post('/driver/login', async (req, res) => {
-  const handler = driverController.login.bind(driverController);
-
-  await ApiHandler(req, res, {
-    logging,
-    logger,
-  })(handler);
-});
+    await ApiHandler(req, res, {
+      logging,
+      logger,
+    })(handler);
+  });
+}
