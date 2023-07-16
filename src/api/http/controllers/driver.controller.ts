@@ -6,8 +6,8 @@ import { DriverService } from '@domain/driver';
 import { AppConfig } from '@infrastructure/app.config';
 import { JWTService } from '@infrastructure/crypto';
 
-import { Authorize } from '@api/http/defs/decorators';
-import { BadRequest } from '@api/http/defs/errors';
+import { Authorize } from '@api/http/core/decorators';
+import { BadRequest } from '@api/http/core/errors';
 import {
   DriverLoginResponseBody,
   DriverSignInSchema,
