@@ -37,7 +37,7 @@ export class JwtService {
     return new Promise((resolve, reject) => {
       jwt.verify(token, secretOrPublicKey, (error, encoded) => {
         if (error) {
-          resolve(undefined);
+          reject(error);
         }
 
         resolve(encoded);

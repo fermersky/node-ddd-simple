@@ -14,9 +14,9 @@ export class AppError implements Error {
   }
 }
 
-export class NotAuthorized extends AppError {
-  constructor(message = 'NotAuthorized') {
-    super('NotAuthorized', message, 401);
+export class Unauthorized extends AppError {
+  constructor(message = 'Unauthorized') {
+    super('Unauthorized', message, 401);
   }
 }
 

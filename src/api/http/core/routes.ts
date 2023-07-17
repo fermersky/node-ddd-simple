@@ -23,18 +23,12 @@ export default async function routes(app: FastifyInstance) {
   app.post('/driver/login', async (req, res) => {
     const handler = driverController.login.bind(driverController);
 
-    await ApiHandler(req, res, {
-      logging,
-      logger,
-    })(handler);
+    await ApiHandler(req, res, { logging, logger })(handler);
   });
 
   app.get('/driver/me', async (req, res) => {
     const handler = driverController.me.bind(driverController);
 
-    await ApiHandler(req, res, {
-      logging,
-      logger,
-    })(handler);
+    await ApiHandler(req, res, { logging, logger })(handler);
   });
 }

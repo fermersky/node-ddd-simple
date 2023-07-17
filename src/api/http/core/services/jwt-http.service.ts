@@ -1,11 +1,11 @@
 import { FastifyRequest } from 'fastify';
-import { JsonWebTokenError } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 
 import { AppConfig } from '@infrastructure/app.config';
 import { JwtService } from '@infrastructure/crypto';
+import { ILogger } from '@infrastructure/logger';
 
-import { NotAuthorized } from '../errors';
+import { Unauthorized } from '../errors';
 
 export interface IDriverJwtPayload {
   email: string;
@@ -17,22 +17,29 @@ export class JwtHttpService {
   constructor(
     @inject(JwtService) private jwt: JwtService,
     @inject(AppConfig) private appConfig: AppConfig,
+    @inject('ILogger') private logger: ILogger,
   ) {}
 
   async validateRequest<T extends IDriverJwtPayload>(req: FastifyRequest): Promise<T> {
-    const token = req.headers['authorization']?.split(' ')[1];
+    try {
+      const token = req.headers['authorization']?.split(' ')[1];
 
-    if (token == null) {
-      throw new NotAuthorized();
+      if (token == null) {
+        throw new Unauthorized();
+      }
+
+      const tokenValid = await this.jwt.verify(token, this.appConfig.JWT_SECRET);
+
+      if (!tokenValid) {
+        throw new Unauthorized();
+      }
+
+      return tokenValid as T;
+    } catch (error) {
+      this.logger.error(error as Error);
+
+      throw new Unauthorized('Token verification failed');
     }
-
-    const tokenValid = await this.jwt.verify(token, this.appConfig.JWT_SECRET);
-
-    if (!tokenValid) {
-      throw new NotAuthorized();
-    }
-
-    return tokenValid as T;
   }
 
   async createToken<T extends IDriverJwtPayload>(payload: T): Promise<string> {
