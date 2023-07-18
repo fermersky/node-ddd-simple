@@ -1,5 +1,4 @@
 import fastify from 'fastify';
-import 'reflect-metadata';
 import { container } from 'tsyringe';
 
 import { AppConfig } from '@infrastructure/app.config';
