@@ -9,6 +9,6 @@ export class ConsoleLogger implements ILogger {
   }
 
   error(error: string | Error): void {
-    console.log(`[ERROR] ${error}`);
+    console.log(`[ERROR] ${JSON.stringify(error)}`);
   }
 }

@@ -1,2 +1,2 @@
-export * from './entity';
-export * from './domain.interfaces';
+export * from './domain.entity';
+export * from './domain.interface';

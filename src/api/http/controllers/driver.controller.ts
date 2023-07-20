@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { Driver, DriverService } from '@domain/driver';
 
-import { BadRequest, NotFound } from '../core/errors';
+import { BadRequest } from '../core/http.errors';
 import { IDriverJwtPayload, JwtHttpService } from '../core/services/jwt-http.service';
 import {
   DriverLoginResponseBody,
@@ -33,11 +33,7 @@ export class DriverController {
 
     const driver = await this.driverService.findByEmail(email);
 
-    if (driver) {
-      return fromDomain(driver);
-    }
-
-    throw new NotFound('Driver not found!');
+    return fromDomain(driver);
   }
 
   async login(req: FastifyRequest): Promise<DriverLoginResponseBody> {

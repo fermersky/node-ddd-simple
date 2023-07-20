@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { EntitySchema } from '../entity';
+import { EntitySchema } from '../domain.entity';
 
 export const DriverSchema = EntitySchema.extend({
   password: z.string(),

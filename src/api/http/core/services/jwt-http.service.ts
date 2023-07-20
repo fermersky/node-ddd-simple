@@ -5,7 +5,7 @@ import { AppConfig } from '@infrastructure/app.config';
 import { JwtService } from '@infrastructure/crypto';
 import { ILogger } from '@infrastructure/logger';
 
-import { Unauthorized } from '../errors';
+import { Unauthorized } from '../http.errors';
 
 export interface IDriverJwtPayload {
   email: string;

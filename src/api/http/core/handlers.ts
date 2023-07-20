@@ -1,7 +1,9 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ZodError, z } from 'zod';
 
-import { AppError } from './errors';
+import { DomainError } from '@domain/domain.errors';
+
+import { AppError } from './http.errors';
 
 type FastifyHTTPHandler = (req: FastifyRequest, res: FastifyReply) => Promise<any>;
 
@@ -21,9 +23,15 @@ const TryCatchErrors = async (req: FastifyRequest, res: FastifyReply, cb: () => 
           message: appError.message,
         },
       });
-    }
-
-    if (error instanceof ZodError) {
+    } else if (error instanceof DomainError) {
+      return res.status(400).send({
+        statusCode: 400,
+        body: {
+          error: error.name,
+          message: error.message,
+        },
+      });
+    } else if (error instanceof ZodError) {
       return res.status(400).send({
         statusCode: 400,
         body: {

@@ -5,6 +5,8 @@ import { Driver } from '@domain/driver';
 import { BcryptService } from '@infrastructure/crypto';
 import { PGContext } from '@infrastructure/db';
 
+import { DriverDoesNotExistError } from './driver.errors';
+
 @injectable()
 export class DriverService {
   constructor(
@@ -20,10 +22,14 @@ export class DriverService {
     return drivers;
   }
 
-  async findByEmail(email: string): Promise<Driver | null> {
+  async findByEmail(email: string): Promise<Driver> {
     await this.pg.begin();
     const driver = await this.pg.driverRepository.findByEmail(email);
     await this.pg.commit();
+
+    if (!driver) {
+      throw new DriverDoesNotExistError(email);
+    }
 
     return driver;
   }
