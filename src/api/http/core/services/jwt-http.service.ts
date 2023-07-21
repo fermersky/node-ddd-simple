@@ -25,13 +25,13 @@ export class JwtHttpService {
       const token = req.headers['authorization']?.split(' ')[1];
 
       if (token == null) {
-        throw new HttpUnauthorized();
+        throw new HttpUnauthorized('Token is missing');
       }
 
       const tokenValid = await this.jwt.verify(token, this.appConfig.JWT_SECRET);
 
       if (!tokenValid) {
-        throw new HttpUnauthorized();
+        throw new HttpUnauthorized('Token verification failed');
       }
 
       return tokenValid as T;

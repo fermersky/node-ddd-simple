@@ -1,8 +1,8 @@
 # Node.js TypeScript Backend
 
-In this project I am trying to implement some basics of DDD, GRASP and SOLID. 
+In this project I am trying to implement some basics of DDD, GRASP and SOLID.
 
-It uses `tsyringe` as a DI library and `fastify` as a HTTP framework. 
+It uses `tsyringe` as a DI library and `fastify` as a HTTP framework.
 
 The application is structured in layers, each serving a specific purpose. Each layer interacts with other layers through explicitly defined contracts or interfaces. This allows for changing the implementation of one layer without impacting the rest of the application.
 
