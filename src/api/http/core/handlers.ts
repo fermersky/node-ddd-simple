@@ -3,7 +3,7 @@ import { ZodError, z } from 'zod';
 
 import { DomainError } from '@domain/domain.errors';
 
-import { AppError } from './http.errors';
+import { HttpError } from './http.errors';
 
 type FastifyHTTPHandler = (req: FastifyRequest, res: FastifyReply) => Promise<any>;
 
@@ -13,8 +13,8 @@ const TryCatchErrors = async (req: FastifyRequest, res: FastifyReply, cb: () => 
   } catch (error) {
     console.log(error);
 
-    if (error instanceof AppError) {
-      const appError = error as AppError;
+    if (error instanceof HttpError) {
+      const appError = error as HttpError;
 
       return res.status(appError.status).send({
         statusCode: appError.status,

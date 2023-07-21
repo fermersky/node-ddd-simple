@@ -5,7 +5,7 @@ import { AppConfig } from '@infrastructure/app.config';
 import { JwtService } from '@infrastructure/crypto';
 import { ILogger } from '@infrastructure/logger';
 
-import { Unauthorized } from '../http.errors';
+import { HttpUnauthorized } from '../http.errors';
 
 export interface IDriverJwtPayload {
   email: string;
@@ -25,20 +25,20 @@ export class JwtHttpService {
       const token = req.headers['authorization']?.split(' ')[1];
 
       if (token == null) {
-        throw new Unauthorized();
+        throw new HttpUnauthorized();
       }
 
       const tokenValid = await this.jwt.verify(token, this.appConfig.JWT_SECRET);
 
       if (!tokenValid) {
-        throw new Unauthorized();
+        throw new HttpUnauthorized();
       }
 
       return tokenValid as T;
     } catch (error) {
       this.logger.error(error as Error);
 
-      throw new Unauthorized('Token verification failed');
+      throw new HttpUnauthorized('Token verification failed');
     }
   }
 

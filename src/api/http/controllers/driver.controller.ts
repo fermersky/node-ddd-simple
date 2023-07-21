@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { Driver, DriverService } from '@domain/driver';
 
-import { BadRequest } from '../core/http.errors';
+import { HttpBadRequest } from '../core/http.errors';
 import { IDriverJwtPayload, JwtHttpService } from '../core/services/jwt-http.service';
 import {
   DriverLoginResponseBody,
@@ -52,6 +52,6 @@ export class DriverController {
       return { token };
     }
 
-    throw new BadRequest('Could not authenticate the driver');
+    throw new HttpBadRequest('Could not authenticate the driver');
   }
 }

@@ -1,4 +1,4 @@
-export class AppError implements Error {
+export class HttpError implements Error {
   name: string;
   message: string;
   status: number;
@@ -10,24 +10,24 @@ export class AppError implements Error {
     this.status = status;
 
     // because we are extending the built-in class
-    Object.setPrototypeOf(this, AppError.prototype);
+    Object.setPrototypeOf(this, HttpError.prototype);
   }
 }
 
-export class Unauthorized extends AppError {
-  constructor(message = 'Unauthorized') {
-    super('Unauthorized', message, 401);
+export class HttpUnauthorized extends HttpError {
+  constructor(message = 'HttpUnauthorized') {
+    super('HttpUnauthorized', message, 401);
   }
 }
 
-export class NotFound extends AppError {
-  constructor(message = 'NotFound') {
-    super('NotFound', message, 404);
+export class HttpNotFound extends HttpError {
+  constructor(message = 'HttpNotFound') {
+    super('HttpNotFound', message, 404);
   }
 }
 
-export class BadRequest extends AppError {
+export class HttpBadRequest extends HttpError {
   constructor(message = 'Bad Request') {
-    super('BadRequest', message, 400);
+    super('HttpBadRequest', message, 400);
   }
 }

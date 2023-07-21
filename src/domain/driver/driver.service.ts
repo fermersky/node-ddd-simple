@@ -1,11 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
-import { Driver } from '@domain/driver';
+import { Driver, DriverDoesNotExistError } from '@domain/driver';
 
 import { BcryptService } from '@infrastructure/crypto';
 import { PGContext } from '@infrastructure/db';
-
-import { DriverDoesNotExistError } from './driver.errors';
 
 @injectable()
 export class DriverService {
