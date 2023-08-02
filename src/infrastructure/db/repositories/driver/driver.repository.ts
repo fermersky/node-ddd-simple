@@ -1,19 +1,12 @@
-import { PoolClient } from 'pg';
 import { injectable } from 'tsyringe';
 
 import { Driver, IDriverRepository } from '@domain/driver';
 
-import { IPGRepository } from '../interfaces';
+import { PgRepository } from '../pg';
 import { IDriverQueryResult } from './driver.repository.types';
 
 @injectable()
-export class DriverRepository implements IDriverRepository, IPGRepository {
-  private client: PoolClient;
-
-  async setClient(client: PoolClient) {
-    this.client = client;
-  }
-
+export class DriverRepository extends PgRepository implements IDriverRepository {
   async getAll(): Promise<Driver[]> {
     const result = await this.client.query<IDriverQueryResult>('SELECT * FROM DRIVERS');
     return this.mapToDomain(result.rows);

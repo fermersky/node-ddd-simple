@@ -1,7 +1,7 @@
 import { FastifyRequest } from 'fastify';
 import { inject, injectable } from 'tsyringe';
 
-import { Driver, DriverService } from '@domain/driver';
+import { DriverService } from '@domain/driver';
 
 import { HttpBadRequest } from '../core/http.errors';
 import { IDriverJwtPayload, JwtHttpService } from '../core/services/jwt-http.service';
@@ -41,17 +41,17 @@ export class DriverController {
 
     const authenticated = await this.driverService.authenticate(email, password);
 
-    if (authenticated) {
-      const driver = (await this.driverService.findByEmail(email)) as Driver;
-
-      const token = await this.jwt.createToken({
-        id: driver.id,
-        email: driver.email,
-      });
-
-      return { token };
+    if (!authenticated) {
+      throw new HttpBadRequest('Could not authenticate the driver');
     }
 
-    throw new HttpBadRequest('Could not authenticate the driver');
+    const driver = await this.driverService.findByEmail(email);
+
+    const token = await this.jwt.createToken({
+      id: driver.id,
+      email: driver.email,
+    });
+
+    return { token };
   }
 }

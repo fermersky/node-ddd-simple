@@ -2,12 +2,12 @@ import { Pool, PoolClient } from 'pg';
 import { inject, singleton } from 'tsyringe';
 
 import { DriverRepository } from './repositories';
-import { IPGRepository } from './repositories/interfaces';
+import { PgRepository } from './repositories/pg';
 
 @singleton()
 export class PGContext {
-  private client: PoolClient | null;
-  private dbRepos: IPGRepository[] = [];
+  private client: PoolClient;
+  private dbRepos: PgRepository[] = [];
   private pool: Pool;
 
   constructor(@inject('IDriverRepository') public driverRepository: DriverRepository) {
@@ -41,11 +41,9 @@ export class PGContext {
     await this.client.query('COMMIT;');
 
     this.client.release();
-
-    this.setClient(null);
   }
 
-  private setClient(client: PoolClient | null) {
+  private setClient(client: PoolClient) {
     this.client = client;
     this.dbRepos.map((repo) => repo.setClient(this.client));
   }
